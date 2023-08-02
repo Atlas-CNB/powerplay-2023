@@ -39,7 +39,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
@@ -54,7 +53,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @Autonomous(name="Test", group="Linear Opmode")
-@Disabled
+//@Disabled
 public class Test extends LinearOpMode {
 
     // Declare OpMode members.
@@ -66,6 +65,9 @@ public class Test extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        double forward = -0.5;                  //definim forward si backward invers
+        double backward = 0.5;                  //(adaptare pt motoare)
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -82,10 +84,10 @@ public class Test extends LinearOpMode {
         runtime.reset();
 
         //Forward
-        FrontLeftMotor.setPower(1);
-        FrontRightMotor.setPower(1);
-        RearLeftMotor.setPower(1);
-        RearRightMotor.setPower(1);
+        FrontLeftMotor.setPower(forward);
+        FrontRightMotor.setPower(forward);
+        RearLeftMotor.setPower(forward);
+        RearRightMotor.setPower(forward);
 
         sleep(1000);
 
@@ -98,10 +100,18 @@ public class Test extends LinearOpMode {
         sleep(1000);
 
         //Reverse
-        FrontLeftMotor.setPower(-1);
-        FrontRightMotor.setPower(-1);
-        RearLeftMotor.setPower(-1);
-        RearRightMotor.setPower(-1);
+        FrontLeftMotor.setPower(backward);
+        FrontRightMotor.setPower(backward);
+        RearLeftMotor.setPower(backward);
+        RearRightMotor.setPower(backward);
+
+        sleep(1000);
+
+        //Lateral
+        FrontLeftMotor.setPower(forward);
+        FrontRightMotor.setPower(backward);
+        RearLeftMotor.setPower(backward);
+        RearRightMotor.setPower(forward);
 
         sleep(1000);
 
