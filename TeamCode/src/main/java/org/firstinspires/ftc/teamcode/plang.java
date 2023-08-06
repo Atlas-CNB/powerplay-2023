@@ -30,14 +30,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -52,9 +49,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Test", group="Linear Opmode")
+@Autonomous(name="plang", group="Linear Opmode")
 //@Disabled
-public class Test extends LinearOpMode {
+public class plang extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -62,11 +59,14 @@ public class Test extends LinearOpMode {
     private DcMotorEx FrontRightMotor;
     private DcMotorEx RearLeftMotor;
     private DcMotorEx RearRightMotor;
-
+    private Servo ServoLift;
+    private Servo ServoClaw;
+    public Servo servo;
     @Override
     public void runOpMode() {
         double forward = 0.5;                  //definim forward si backward invers
         double backward = -0.5;                  //(adaptare pt motoare)
+        double startPosititon = -0.2;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -75,6 +75,11 @@ public class Test extends LinearOpMode {
         FrontRightMotor = hardwareMap.get(DcMotorEx.class, "FrontRightMotor");
         RearLeftMotor = hardwareMap.get(DcMotorEx.class, "RearLeftMotor");
         RearRightMotor = hardwareMap.get(DcMotorEx.class, "RearRightMotor");
+        ServoLift = hardwareMap.get(Servo.class, "ServoLift");
+        ServoClaw = hardwareMap.get(Servo.class, "ServoClaw");
+
+        ServoClaw.setPosition(startPosititon);
+        ServoLift.setPosition(startPosititon);
 
         FrontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         RearLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -83,39 +88,16 @@ public class Test extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        //Forward
-        FrontLeftMotor.setPower(forward);
-        FrontRightMotor.setPower(forward);
-        RearLeftMotor.setPower(forward);
-        RearRightMotor.setPower(forward);
+        sleep(2000);
 
-        sleep(1000);
-
-        //Turn right
-        FrontLeftMotor.setPower(1);
-        FrontRightMotor.setPower(-1);
-        RearLeftMotor.setPower(1);
-        RearRightMotor.setPower(-1);
-
-        sleep(1000);
-
-        //Reverse
-        FrontLeftMotor.setPower(backward);
-        FrontRightMotor.setPower(backward);
-        RearLeftMotor.setPower(backward);
-        RearRightMotor.setPower(backward);
-
-        sleep(1000);
-
-        //Lateral
-        FrontLeftMotor.setPower(forward);
-        FrontRightMotor.setPower(backward);
-        RearLeftMotor.setPower(backward);
-        RearRightMotor.setPower(forward);
-
-        sleep(1000);
-
-        //Stop
+        ServoClaw.setPosition(1);
+        ServoLift.setPosition(1);
+        sleep(2000);
+        FrontLeftMotor.setPower(0.5);
+        FrontRightMotor.setPower(0.5);
+       RearLeftMotor.setPower(0.5);
+        RearRightMotor.setPower(0.5);
+        sleep(2000 );
         FrontLeftMotor.setPower(0);
         FrontRightMotor.setPower(0);
         RearLeftMotor.setPower(0);

@@ -30,14 +30,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -52,9 +48,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Test", group="Linear Opmode")
+@Autonomous(name="TestTemporar", group="Linear Opmode")
 //@Disabled
-public class Test extends LinearOpMode {
+public class TestTemporar extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -65,8 +61,8 @@ public class Test extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        double forward = 0.5;                  //definim forward si backward invers
-        double backward = -0.5;                  //(adaptare pt motoare)
+        double forward = -0.5;                  //definim forward si backward invers
+        double backward = 0.5;                  //(adaptare pt motoare)
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
