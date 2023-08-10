@@ -75,6 +75,9 @@ public class TeleOpButTest extends OpMode
     int numberXPresses = 0;
     int numberBPresses = 0;
     boolean esteActivatClaw = false, esteActivatLift = false;
+    boolean LeftBumperPressed = false;
+    boolean RightBumperPressed = false;
+
 
     @Override
     public void loop(){
@@ -155,7 +158,7 @@ public class TeleOpButTest extends OpMode
         }
         if (driveUntil > System.currentTimeMillis() ){
             if (currentLevel > wantedLevel){
-                LiftMotor.setPower(1.5);
+                LiftMotor.setPower(1);
             }
             else if (currentLevel < wantedLevel){
                 LiftMotor.setPower(-1.5);
@@ -169,6 +172,7 @@ public class TeleOpButTest extends OpMode
 
         if (gamepad1.right_bumper && !esteActivatClaw) {
             esteActivatClaw = true;
+            RightBumperPressed = true;
             numberRightPresses++;
             driveClaw = System.currentTimeMillis() + 400;
         }
@@ -177,13 +181,15 @@ public class TeleOpButTest extends OpMode
                 ServoClaw.setPosition(1);
             else ServoClaw.setPosition(0);
         }
-        else {
+        else if(RightBumperPressed) {
+            RightBumperPressed = false;
             useClaw = -useClaw;
             esteActivatClaw = false;
         }
 
         if (gamepad1.left_bumper && !esteActivatLift) {
             esteActivatLift = true;
+            LeftBumperPressed = true;
             numberLeftPresses++;
             driveArm = System.currentTimeMillis() + 400;
         }
@@ -191,11 +197,13 @@ public class TeleOpButTest extends OpMode
             if (useLift == -1)
                 ServoLift.setPosition(1);
             else ServoLift.setPosition(0);
-            }
-        else {
+        }
+        else if(LeftBumperPressed){
+            LeftBumperPressed = false;
             useLift = -useLift;
             esteActivatLift = false;
         }
+
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
