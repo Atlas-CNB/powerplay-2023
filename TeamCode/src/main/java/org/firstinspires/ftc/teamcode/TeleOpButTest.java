@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="TeleOpButTest", group="Iterative Opmode")
+@TeleOp(name="TeleOpFinal", group="Iterative Opmode")
 //@Disabled
 public class TeleOpButTest extends OpMode
 {
@@ -19,7 +19,6 @@ public class TeleOpButTest extends OpMode
     private DcMotorEx RearLeftMotor;
     private DcMotorEx RearRightMotor;
     private DcMotorEx LiftMotor;
-    private Servo ServoLift;
     private Servo ServoClaw;
 
     /*
@@ -33,11 +32,9 @@ public class TeleOpButTest extends OpMode
         RearLeftMotor = hardwareMap.get(DcMotorEx.class, "RearLeftMotor");
         RearRightMotor = hardwareMap.get(DcMotorEx.class, "RearRightMotor");
         LiftMotor = hardwareMap.get(DcMotorEx.class, "LiftMotor");
-        ServoLift = hardwareMap.get(Servo.class, "ServoLift");
         ServoClaw = hardwareMap.get(Servo.class, "ServoClaw");
         int startPosititon = 0;
         ServoClaw.setPosition(startPosititon);
-        ServoLift.setPosition(startPosititon);
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -66,17 +63,14 @@ public class TeleOpButTest extends OpMode
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
-    long driveUntil, driveClaw, driveArm;
+    long driveUntil, driveClaw;
     long currentLevel = 0, wantedLevel = 0;
-    int useLift = -1;
     int useClaw = -1;
     int numberLeftPresses = 0;
-    int numberRightPresses = 0;
     int numberXPresses = 0;
     int numberBPresses = 0;
-    boolean esteActivatClaw = false, esteActivatLift = false;
+    boolean esteActivatClaw = false;
     boolean LeftBumperPressed = false;
-    boolean RightBumperPressed = false;
 
 
     @Override
@@ -117,10 +111,10 @@ public class TeleOpButTest extends OpMode
             if (gamepad1.a){
                 wantedLevel = 0;
                 if (currentLevel > wantedLevel){
-                    driveUntil =  System.currentTimeMillis() + 350 * (currentLevel-wantedLevel);
+                    driveUntil =  System.currentTimeMillis() + 450 * (currentLevel-wantedLevel);
                 }
                 else if(currentLevel < wantedLevel){
-                    driveUntil =  System.currentTimeMillis() + 350 * (wantedLevel-currentLevel);
+                    driveUntil =  System.currentTimeMillis() + 450 * (wantedLevel-currentLevel);
                 }
             }
 
@@ -128,20 +122,20 @@ public class TeleOpButTest extends OpMode
                 numberXPresses++;
                 wantedLevel = 1;
                 if (currentLevel > wantedLevel){
-                    driveUntil =  System.currentTimeMillis() + 350 * (currentLevel-wantedLevel);
+                    driveUntil =  System.currentTimeMillis() + 450 * (currentLevel-wantedLevel);
                 }
                 else if(currentLevel < wantedLevel){
-                    driveUntil =  System.currentTimeMillis() + 350 * (wantedLevel-currentLevel);
+                    driveUntil =  System.currentTimeMillis() + 450 * (wantedLevel-currentLevel);
                 }
             }
 
             if (gamepad1.y){
                 wantedLevel = 2;
                 if (currentLevel > wantedLevel){
-                    driveUntil =  System.currentTimeMillis() + 350 * (currentLevel-wantedLevel);
+                    driveUntil =  System.currentTimeMillis() + 450 * (currentLevel-wantedLevel);
                 }
                 else if(currentLevel < wantedLevel){
-                    driveUntil =  System.currentTimeMillis() + 350 * (wantedLevel-currentLevel);
+                    driveUntil =  System.currentTimeMillis() + 450 * (wantedLevel-currentLevel);
                 }
             }
 
@@ -149,16 +143,16 @@ public class TeleOpButTest extends OpMode
                 numberBPresses++;
                 wantedLevel = 3;
                 if (currentLevel > wantedLevel){
-                    driveUntil =  System.currentTimeMillis() + 350 * (currentLevel-wantedLevel);
+                    driveUntil =  System.currentTimeMillis() + 450 * (currentLevel-wantedLevel);
                 }
                 else if(currentLevel < wantedLevel){
-                    driveUntil =  System.currentTimeMillis() + 350 * (wantedLevel-currentLevel);
+                    driveUntil =  System.currentTimeMillis() + 450 * (wantedLevel-currentLevel);
                 }
             }
         }
         if (driveUntil > System.currentTimeMillis() ){
             if (currentLevel > wantedLevel){
-                LiftMotor.setPower(1);
+                LiftMotor.setPower(0.888);
             }
             else if (currentLevel < wantedLevel){
                 LiftMotor.setPower(-1.5);
@@ -170,10 +164,10 @@ public class TeleOpButTest extends OpMode
             currentLevel = wantedLevel;
         }
 
-        if (gamepad1.right_bumper && !esteActivatClaw) {
+        if (gamepad1.left_bumper && !esteActivatClaw) {
             esteActivatClaw = true;
-            RightBumperPressed = true;
-            numberRightPresses++;
+            LeftBumperPressed = true;
+            numberLeftPresses++;
             driveClaw = System.currentTimeMillis() + 400;
         }
         if (driveClaw > System.currentTimeMillis()) {
@@ -181,27 +175,10 @@ public class TeleOpButTest extends OpMode
                 ServoClaw.setPosition(1);
             else ServoClaw.setPosition(0);
         }
-        else if(RightBumperPressed) {
-            RightBumperPressed = false;
+        else if(LeftBumperPressed) {
+            LeftBumperPressed = false;
             useClaw = -useClaw;
             esteActivatClaw = false;
-        }
-
-        if (gamepad1.left_bumper && !esteActivatLift) {
-            esteActivatLift = true;
-            LeftBumperPressed = true;
-            numberLeftPresses++;
-            driveArm = System.currentTimeMillis() + 400;
-        }
-        if (driveArm > System.currentTimeMillis()) {
-            if (useLift == -1)
-                ServoLift.setPosition(1);
-            else ServoLift.setPosition(0);
-        }
-        else if(LeftBumperPressed){
-            LeftBumperPressed = false;
-            useLift = -useLift;
-            esteActivatLift = false;
         }
 
 
@@ -211,10 +188,9 @@ public class TeleOpButTest extends OpMode
         telemetry.addData("currentLevel", " %d", currentLevel);
         telemetry.addData("wantedLevel", " %d", wantedLevel);
         telemetry.addData("number of left bumper presses", " %d", numberLeftPresses);
-        telemetry.addData("number of right bumper presses", " %d", numberRightPresses);
         telemetry.addData("number of x presses", " %d", numberXPresses);
         telemetry.addData("number of b presses", " %d", numberBPresses);
-        telemetry.addData("uselift = ", "%d", useLift);
+        telemetry.addData("driveClaw = ", "%d", driveClaw);
     }
 
     /*

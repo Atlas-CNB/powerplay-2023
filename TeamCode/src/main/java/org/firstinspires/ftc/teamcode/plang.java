@@ -97,6 +97,11 @@ public class plang extends LinearOpMode {
         FrontRightMotor.setPower(0.5);
        RearLeftMotor.setPower(0.5);
         RearRightMotor.setPower(0.5);
+        sleep(2000);
+        FrontLeftMotor.setPower(-0.5);
+        FrontRightMotor.setPower(0.5);
+       RearLeftMotor.setPower(-0.5);
+        RearRightMotor.setPower(0.5);
         sleep(2000 );
         FrontLeftMotor.setPower(0);
         FrontRightMotor.setPower(0);
